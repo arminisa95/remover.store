@@ -1,14 +1,12 @@
-import path from "node:path";
+import { neon } from "@neondatabase/serverless";
+import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaClient } from "../generated/prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 
 const globalForPrisma = globalThis as unknown as { prisma: InstanceType<typeof PrismaClient> };
 
 function createClient() {
-  const dbPath = path.resolve(process.cwd(), "prisma/dev.db");
-  const adapter = new PrismaBetterSqlite3({
-    url: `file:${dbPath}`,
-  });
+  const sql = neon(process.env.DATABASE_URL!);
+  const adapter = new PrismaNeon(sql);
   return new PrismaClient({ adapter });
 }
 
