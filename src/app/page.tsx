@@ -1,5 +1,5 @@
-import BackgroundRemover from "./components/BackgroundRemover";
+import ToolApp from "./components/ToolApp";
 
 export default function Home() {
-  return <BackgroundRemover />;
+  return <ToolApp />;
 }
