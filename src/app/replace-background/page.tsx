@@ -22,5 +22,5 @@ export const metadata: Metadata = {
 };
 
 export default function ReplaceBackgroundPage() {
-  return <ToolApp initialTool="bg-replace" />;
+  return <ToolApp />;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Upload, Download, Trash2, ArrowLeft, Eraser, Loader2, Undo2 } from "lucide-react";
 
 const ACCEPTED_FORMATS = "image/jpeg,image/png,image/webp,image/bmp,image/gif,image/tiff,image/avif";
@@ -12,10 +12,12 @@ interface ObjectRemoverProps {
   onNeedCredits: () => void;
   isLoggedIn: boolean;
   onLoginRequired: () => void;
+  inputImageUrl?: string;
+  onResult?: (url: string) => void;
 }
 
 export default function ObjectRemover({
-  credits, onUseCredit, onBack, onNeedCredits, isLoggedIn, onLoginRequired,
+  credits, onUseCredit, onBack, onNeedCredits, isLoggedIn, onLoginRequired, inputImageUrl, onResult,
 }: ObjectRemoverProps) {
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [processedUrl, setProcessedUrl] = useState<string | null>(null);
@@ -29,6 +31,22 @@ export default function ObjectRemover({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const maskCanvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    if (inputImageUrl && !originalUrl) {
+      setError(null);
+      setProcessedUrl(null);
+      setFileName("image");
+      setOriginalUrl(inputImageUrl);
+      const img = new Image();
+      img.onload = () => {
+        imgRef.current = img;
+        setupCanvases(img);
+      };
+      img.src = inputImageUrl;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputImageUrl]);
 
   const setupCanvases = useCallback((img: HTMLImageElement) => {
     const canvas = canvasRef.current;
@@ -126,9 +144,6 @@ export default function ObjectRemover({
   }, []);
 
   const inpaint = useCallback(async () => {
-    if (!isLoggedIn) { onLoginRequired(); return; }
-    if (credits < 1) { onNeedCredits(); return; }
-
     const canvas = canvasRef.current;
     const maskCanvas = maskCanvasRef.current;
     if (!canvas || !maskCanvas || !imgRef.current) return;
@@ -137,8 +152,6 @@ export default function ObjectRemover({
     setError(null);
 
     try {
-      const ok = await onUseCredit();
-      if (!ok) { setIsProcessing(false); return; }
 
       const ctx = canvas.getContext("2d")!;
       const maskCtx = maskCanvas.getContext("2d")!;
@@ -238,15 +251,24 @@ export default function ObjectRemover({
     } finally {
       setIsProcessing(false);
     }
-  }, [credits, isLoggedIn, brushSize, onUseCredit, onNeedCredits, onLoginRequired, processedUrl]);
+  }, [brushSize, processedUrl]);
 
-  const downloadImage = useCallback(() => {
+  const downloadImage = useCallback(async () => {
     if (!processedUrl) return;
+    if (!isLoggedIn) { onLoginRequired(); return; }
+    if (credits < 1) { onNeedCredits(); return; }
+    const ok = await onUseCredit();
+    if (!ok) return;
     const a = document.createElement("a");
     a.href = processedUrl;
     a.download = `${fileName || "image"}_clean.png`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  }, [processedUrl, fileName]);
+  }, [processedUrl, fileName, credits, isLoggedIn, onUseCredit, onNeedCredits, onLoginRequired]);
+
+  const applyAndGoBack = useCallback(() => {
+    if (!processedUrl || !onResult) return;
+    onResult(processedUrl);
+  }, [processedUrl, onResult]);
 
   const reset = useCallback(() => {
     if (originalUrl) URL.revokeObjectURL(originalUrl);
@@ -268,7 +290,7 @@ export default function ObjectRemover({
         </div>
         <div>
           <h2 className="text-2xl font-bold text-[#f0e8d8]">Retoucher</h2>
-          <p className="text-sm text-[#8aab98]">Paint over and remove unwanted objects – 1 Credit</p>
+          <p className="text-sm text-[#8aab98]">Paint over and remove unwanted objects</p>
         </div>
       </div>
 
@@ -302,16 +324,22 @@ export default function ObjectRemover({
             {processedUrl && (
               <button onClick={downloadImage}
                 className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-6 py-3 rounded-xl transition-colors">
-                <Download className="w-5 h-5" /> Download
+                <Download className="w-5 h-5" /> Download HD (1 Credit)
+              </button>
+            )}
+            {onResult && processedUrl && (
+              <button onClick={applyAndGoBack}
+                className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-6 py-3 rounded-xl transition-colors">
+                Apply & Go Back
               </button>
             )}
             <button onClick={undo}
               className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-4 py-3 rounded-xl transition-colors">
               <Undo2 className="w-4 h-4" /> Clear mask
             </button>
-            <button onClick={reset}
+            <button onClick={onBack}
               className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-4 py-3 rounded-xl transition-colors">
-              <Trash2 className="w-4 h-4" /> New image
+              <Trash2 className="w-4 h-4" /> Back
             </button>
           </div>
 

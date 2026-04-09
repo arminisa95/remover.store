@@ -1,15 +1,22 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Upload, Download, Trash2, ArrowLeft, Sparkles, RotateCcw } from "lucide-react";
 
 const ACCEPTED_FORMATS = "image/jpeg,image/png,image/webp,image/bmp,image/gif,image/tiff,image/avif";
 
 interface ImageEnhancerProps {
   onBack: () => void;
+  inputImageUrl?: string;
+  onResult?: (url: string) => void;
+  credits: number;
+  onUseCredit: () => Promise<boolean>;
+  onNeedCredits: () => void;
+  isLoggedIn: boolean;
+  onLoginRequired: () => void;
 }
 
-export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
+export default function ImageEnhancer({ onBack, inputImageUrl, onResult, credits, onUseCredit, onNeedCredits, isLoggedIn, onLoginRequired }: ImageEnhancerProps) {
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [processedUrl, setProcessedUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState("");
@@ -20,6 +27,19 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
   const [sharpness, setSharpness] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const currentFileRef = useRef<File | null>(null);
+
+  useEffect(() => {
+    if (inputImageUrl && !originalUrl) {
+      fetch(inputImageUrl).then(r => r.blob()).then(blob => {
+        const file = new File([blob], "image.png", { type: "image/png" });
+        currentFileRef.current = file;
+        setFileName("image");
+        setOriginalUrl(inputImageUrl);
+        applyFilters(file, brightness, contrast, saturation, sharpness);
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputImageUrl]);
 
   const applyFilters = useCallback(
     async (file: File, br: number, co: number, sa: number, sh: number) => {
@@ -113,13 +133,22 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
     if (currentFileRef.current) applyFilters(currentFileRef.current, 100, 100, 100, 0);
   }, [applyFilters]);
 
-  const downloadImage = useCallback(() => {
+  const downloadImage = useCallback(async () => {
     if (!processedUrl) return;
+    if (!isLoggedIn) { onLoginRequired(); return; }
+    if (credits < 1) { onNeedCredits(); return; }
+    const ok = await onUseCredit();
+    if (!ok) return;
     const a = document.createElement("a");
     a.href = processedUrl;
     a.download = `${fileName || "image"}_enhanced.png`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  }, [processedUrl, fileName]);
+  }, [processedUrl, fileName, credits, isLoggedIn, onUseCredit, onNeedCredits, onLoginRequired]);
+
+  const applyAndGoBack = useCallback(() => {
+    if (!processedUrl || !onResult) return;
+    onResult(processedUrl);
+  }, [processedUrl, onResult]);
 
   const reset = useCallback(() => {
     if (originalUrl) URL.revokeObjectURL(originalUrl);
@@ -177,7 +206,13 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
             {processedUrl && (
               <button onClick={downloadImage}
                 className="flex items-center gap-2 bg-[#4ecdc4] hover:bg-[#45b8b0] text-[#0b1f1a] font-semibold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-[#4ecdc4]/20">
-                <Download className="w-5 h-5" /> Download
+                <Download className="w-5 h-5" /> Download HD (1 Credit)
+              </button>
+            )}
+            {onResult && processedUrl && (
+              <button onClick={applyAndGoBack}
+                className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-6 py-3 rounded-xl transition-colors">
+                Apply & Go Back
               </button>
             )}
             <button onClick={autoEnhance}
@@ -188,9 +223,9 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
               className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-4 py-3 rounded-xl transition-colors">
               <RotateCcw className="w-4 h-4" /> Reset
             </button>
-            <button onClick={reset}
+            <button onClick={onBack}
               className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-4 py-3 rounded-xl transition-colors">
-              <Trash2 className="w-4 h-4" /> New image
+              <Trash2 className="w-4 h-4" /> Back
             </button>
           </div>
 

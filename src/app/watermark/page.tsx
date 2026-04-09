@@ -23,5 +23,5 @@ export const metadata: Metadata = {
 };
 
 export default function WatermarkPage() {
-  return <ToolApp initialTool="watermark" />;
+  return <ToolApp />;
 }

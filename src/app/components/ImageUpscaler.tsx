@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Upload, Download, Trash2, Loader2, ArrowLeft, ZoomIn } from "lucide-react";
 
 const ACCEPTED_FORMATS = "image/jpeg,image/png,image/webp,image/bmp,image/gif,image/tiff,image/avif";
@@ -13,10 +13,12 @@ interface ImageUpscalerProps {
   onNeedCredits: () => void;
   isLoggedIn: boolean;
   onLoginRequired: () => void;
+  inputImageUrl?: string;
+  onResult?: (url: string) => void;
 }
 
 export default function ImageUpscaler({
-  credits, onUseCredit, onBack, onNeedCredits, isLoggedIn, onLoginRequired,
+  credits, onUseCredit, onBack, onNeedCredits, isLoggedIn, onLoginRequired, inputImageUrl, onResult,
 }: ImageUpscalerProps) {
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [processedUrl, setProcessedUrl] = useState<string | null>(null);
@@ -29,11 +31,18 @@ export default function ImageUpscaler({
   const [originalSize, setOriginalSize] = useState({ w: 0, h: 0 });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (inputImageUrl && !originalUrl && !isProcessing) {
+      fetch(inputImageUrl).then(r => r.blob()).then(blob => {
+        const file = new File([blob], "image.png", { type: "image/png" });
+        processFile(file);
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputImageUrl]);
+
   const processFile = useCallback(
     async (file: File) => {
-      if (!isLoggedIn) { onLoginRequired(); return; }
-      if (credits < 1) { onNeedCredits(); return; }
-
       setError(null);
       setProcessedUrl(null);
       setProgress(0);
@@ -49,9 +58,6 @@ export default function ImageUpscaler({
       setIsProcessing(true);
 
       try {
-        const ok = await onUseCredit();
-        if (!ok) { setIsProcessing(false); return; }
-
         setProgress(10);
 
         const img = new Image();
@@ -139,7 +145,7 @@ export default function ImageUpscaler({
         setIsProcessing(false);
       }
     },
-    [credits, scale, isLoggedIn, onUseCredit, onNeedCredits, onLoginRequired]
+    [scale]
   );
 
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -153,13 +159,22 @@ export default function ImageUpscaler({
     if (file) processFile(file);
   }, [processFile]);
 
-  const downloadImage = useCallback(() => {
+  const downloadImage = useCallback(async () => {
     if (!processedUrl) return;
+    if (!isLoggedIn) { onLoginRequired(); return; }
+    if (credits < 1) { onNeedCredits(); return; }
+    const ok = await onUseCredit();
+    if (!ok) return;
     const a = document.createElement("a");
     a.href = processedUrl;
     a.download = `${fileName || "image"}_${scale}x.png`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  }, [processedUrl, fileName, scale]);
+  }, [processedUrl, fileName, scale, credits, isLoggedIn, onUseCredit, onNeedCredits, onLoginRequired]);
+
+  const applyAndGoBack = useCallback(() => {
+    if (!processedUrl || !onResult) return;
+    onResult(processedUrl);
+  }, [processedUrl, onResult]);
 
   const reset = useCallback(() => {
     if (originalUrl) URL.revokeObjectURL(originalUrl);
@@ -181,7 +196,7 @@ export default function ImageUpscaler({
         </div>
         <div>
           <h2 className="text-2xl font-bold text-[#f0e8d8]">AI Upscaling</h2>
-          <p className="text-sm text-[#8aab98]">Enlarge images without quality loss – 1 Credit</p>
+          <p className="text-sm text-[#8aab98]">Enlarge images without quality loss</p>
         </div>
       </div>
 
@@ -239,12 +254,18 @@ export default function ImageUpscaler({
             {processedUrl && (
               <button onClick={downloadImage}
                 className="flex items-center gap-2 bg-[#4ecdc4] hover:bg-[#45b8b0] text-[#0b1f1a] font-semibold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-[#4ecdc4]/20">
-                <Download className="w-5 h-5" /> Download PNG
+                <Download className="w-5 h-5" /> Download HD (1 Credit)
               </button>
             )}
-            <button onClick={reset}
-              className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-6 py-3 rounded-xl transition-colors">
-              <Trash2 className="w-5 h-5" /> New image
+            {onResult && processedUrl && (
+              <button onClick={applyAndGoBack}
+                className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-6 py-3 rounded-xl transition-colors">
+                Apply & Go Back
+              </button>
+            )}
+            <button onClick={onBack}
+              className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-4 py-3 rounded-xl transition-colors">
+              <Trash2 className="w-5 h-5" /> Back
             </button>
           </div>
 

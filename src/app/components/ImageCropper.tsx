@@ -18,9 +18,16 @@ const PRESETS = [
 
 interface ImageCropperProps {
   onBack: () => void;
+  inputImageUrl?: string;
+  onResult?: (url: string) => void;
+  credits: number;
+  onUseCredit: () => Promise<boolean>;
+  onNeedCredits: () => void;
+  isLoggedIn: boolean;
+  onLoginRequired: () => void;
 }
 
-export default function ImageCropper({ onBack }: ImageCropperProps) {
+export default function ImageCropper({ onBack, inputImageUrl, onResult, credits, onUseCredit, onNeedCredits, isLoggedIn, onLoginRequired }: ImageCropperProps) {
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState("");
   const [isDragging, setIsDragging] = useState(false);
@@ -32,6 +39,13 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (inputImageUrl && !originalUrl) {
+      setOriginalUrl(inputImageUrl);
+      setFileName("image");
+    }
+  }, [inputImageUrl, originalUrl]);
 
   const initCrop = useCallback((natW: number, natH: number, dispW: number, dispH: number, ratioIdx: number) => {
     const ratio = PRESETS[ratioIdx].ratio;
@@ -92,29 +106,42 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
     if (file) processFile(file);
   }, [processFile]);
 
-  const downloadCropped = useCallback(() => {
-    if (!imgRef.current || !imgDims.w) return;
-    const scaleX = imgDims.natW / imgDims.w;
-    const scaleY = imgDims.natH / imgDims.h;
-    const sx = cropArea.x * scaleX;
-    const sy = cropArea.y * scaleY;
-    const sw = cropArea.w * scaleX;
-    const sh = cropArea.h * scaleY;
+  const getCroppedBlob = useCallback((): Promise<Blob | null> => {
+    return new Promise((resolve) => {
+      if (!imgRef.current || !imgDims.w) { resolve(null); return; }
+      const scaleX = imgDims.natW / imgDims.w;
+      const scaleY = imgDims.natH / imgDims.h;
+      const sx = cropArea.x * scaleX;
+      const sy = cropArea.y * scaleY;
+      const sw = cropArea.w * scaleX;
+      const sh = cropArea.h * scaleY;
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(sw);
+      canvas.height = Math.round(sh);
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(imgRef.current, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob((blob) => resolve(blob), "image/png");
+    });
+  }, [cropArea, imgDims]);
 
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.round(sw);
-    canvas.height = Math.round(sh);
-    const ctx = canvas.getContext("2d")!;
-    ctx.drawImage(imgRef.current, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+  const downloadCropped = useCallback(async () => {
+    if (!isLoggedIn) { onLoginRequired(); return; }
+    if (credits < 1) { onNeedCredits(); return; }
+    const ok = await onUseCredit();
+    if (!ok) return;
+    const blob = await getCroppedBlob();
+    if (!blob) return;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${fileName || "image"}_cropped.png`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }, [credits, isLoggedIn, onUseCredit, onNeedCredits, onLoginRequired, getCroppedBlob, fileName]);
 
-    canvas.toBlob((blob) => {
-      if (!blob) return;
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = `${fileName || "image"}_cropped.png`;
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    }, "image/png");
-  }, [cropArea, imgDims, fileName]);
+  const applyCrop = useCallback(async () => {
+    const blob = await getCroppedBlob();
+    if (!blob || !onResult) return;
+    onResult(URL.createObjectURL(blob));
+  }, [getCroppedBlob, onResult]);
 
   const reset = useCallback(() => {
     if (originalUrl) URL.revokeObjectURL(originalUrl);
@@ -161,11 +188,17 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
           <div className="flex flex-wrap items-center gap-3">
             <button onClick={downloadCropped}
               className="flex items-center gap-2 bg-[#4ecdc4] hover:bg-[#45b8b0] text-[#0b1f1a] font-semibold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-[#4ecdc4]/20">
-              <Download className="w-5 h-5" /> Download cropped
+              <Download className="w-5 h-5" /> Download HD (1 Credit)
             </button>
-            <button onClick={reset}
-              className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-6 py-3 rounded-xl transition-colors">
-              <Trash2 className="w-5 h-5" /> New image
+            {onResult && (
+              <button onClick={applyCrop}
+                className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-6 py-3 rounded-xl transition-colors">
+                Apply & Go Back
+              </button>
+            )}
+            <button onClick={onBack}
+              className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-4 py-3 rounded-xl transition-colors">
+              <Trash2 className="w-5 h-5" /> Back
             </button>
           </div>
 

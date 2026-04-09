@@ -23,5 +23,5 @@ export const metadata: Metadata = {
 };
 
 export default function RemoveBackgroundPage() {
-  return <ToolApp initialTool="bg-remove" />;
+  return <ToolApp />;
 }

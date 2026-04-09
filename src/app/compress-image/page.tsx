@@ -23,5 +23,5 @@ export const metadata: Metadata = {
 };
 
 export default function CompressImagePage() {
-  return <ToolApp initialTool="compress" />;
+  return <ToolApp />;
 }

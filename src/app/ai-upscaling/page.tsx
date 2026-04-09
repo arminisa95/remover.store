@@ -23,5 +23,5 @@ export const metadata: Metadata = {
 };
 
 export default function AIUpscalingPage() {
-  return <ToolApp initialTool="upscale" />;
+  return <ToolApp />;
 }

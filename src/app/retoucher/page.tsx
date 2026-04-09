@@ -23,5 +23,5 @@ export const metadata: Metadata = {
 };
 
 export default function RetoucherPage() {
-  return <ToolApp initialTool="retouch" />;
+  return <ToolApp />;
 }

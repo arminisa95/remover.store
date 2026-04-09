@@ -23,5 +23,5 @@ export const metadata: Metadata = {
 };
 
 export default function EnhanceImagePage() {
-  return <ToolApp initialTool="enhance" />;
+  return <ToolApp />;
 }
