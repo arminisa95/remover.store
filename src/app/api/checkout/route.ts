@@ -4,10 +4,10 @@ import { authOptions } from "@/lib/auth";
 import { stripe } from "@/lib/stripe";
 
 const CREDIT_PACKAGES = [
-  { credits: 1, priceCents: 25, label: "1 Credit" },
-  { credits: 5, priceCents: 100, label: "5 Credits" },
-  { credits: 20, priceCents: 350, label: "20 Credits" },
-  { credits: 50, priceCents: 750, label: "50 Credits" },
+  { credits: 10, priceCents: 299, label: "10 Credits" },
+  { credits: 30, priceCents: 699, label: "30 Credits" },
+  { credits: 75, priceCents: 1499, label: "75 Credits" },
+  { credits: 200, priceCents: 2999, label: "200 Credits" },
 ];
 
 export async function POST(req: Request) {

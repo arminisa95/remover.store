@@ -4,10 +4,10 @@ import { useState } from "react";
 import { X, CreditCard, Loader2 } from "lucide-react";
 
 const CREDIT_PACKAGES = [
-  { credits: 1, price: "0,25 €", label: "1 Credit" },
-  { credits: 5, price: "1,00 €", label: "5 Credits", badge: "Spare 20%" },
-  { credits: 20, price: "3,50 €", label: "20 Credits", badge: "Spare 30%" },
-  { credits: 50, price: "7,50 €", label: "50 Credits", badge: "Spare 40%" },
+  { credits: 10, price: "2,99 €", label: "10 Credits", perCredit: "0,30 €/Credit" },
+  { credits: 30, price: "6,99 €", label: "30 Credits", perCredit: "0,23 €/Credit", badge: "Beliebt" },
+  { credits: 75, price: "14,99 €", label: "75 Credits", perCredit: "0,20 €/Credit", badge: "Spare 33%" },
+  { credits: 200, price: "29,99 €", label: "200 Credits", perCredit: "0,15 €/Credit", badge: "Spare 50%" },
 ];
 
 interface BuyCreditsModalProps {
@@ -74,6 +74,7 @@ export default function BuyCreditsModal({ onClose, onError }: BuyCreditsModalPro
               )}
               <div className="text-lg font-bold text-[#f0e8d8]">{pkg.label}</div>
               <div className="text-sm text-[#4ecdc4] font-medium">{pkg.price}</div>
+              <div className="text-xs text-[#8aab98] mt-1">{pkg.perCredit}</div>
               {buyLoading === i && (
                 <Loader2 className="w-4 h-4 text-[#4ecdc4] animate-spin absolute bottom-3 right-3" />
               )}
