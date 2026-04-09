@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Upload, Download, Trash2, ArrowLeft, Eraser, Loader2, Undo2 } from "lucide-react";
+import PreviewOverlay from "./PreviewOverlay";
 
 const ACCEPTED_FORMATS = "image/jpeg,image/png,image/webp,image/bmp,image/gif,image/tiff,image/avif";
 
@@ -359,18 +360,20 @@ export default function ObjectRemover({
           {/* Canvas */}
           <div className="bg-[#133027]/60 backdrop-blur-md border border-[#2a4a3a]/60 rounded-2xl overflow-hidden p-4">
             <p className="text-xs text-[#8aab98] mb-3">Paint over the objects you want to remove (highlighted in red)</p>
-            <div className="flex justify-center relative">
-              <canvas
-                ref={canvasRef}
-                className="max-w-full rounded-lg cursor-crosshair"
-                style={{ maxHeight: 500 }}
-                onMouseDown={handleMouseDown}
-                onMouseMove={paint}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
-              />
-              <canvas ref={maskCanvasRef} className="hidden" />
-            </div>
+            <PreviewOverlay className="flex justify-center">
+              <div className="relative">
+                <canvas
+                  ref={canvasRef}
+                  className="max-w-full rounded-lg cursor-crosshair"
+                  style={{ maxHeight: 500 }}
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={paint}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
+                />
+                <canvas ref={maskCanvasRef} className="hidden" />
+              </div>
+            </PreviewOverlay>
           </div>
         </div>
       )}

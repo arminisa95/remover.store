@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Upload, Download, Trash2, ArrowLeft, Sparkles, RotateCcw } from "lucide-react";
+import PreviewOverlay from "./PreviewOverlay";
 
 const ACCEPTED_FORMATS = "image/jpeg,image/png,image/webp,image/bmp,image/gif,image/tiff,image/avif";
 
@@ -256,7 +257,9 @@ export default function ImageEnhancer({ onBack, inputImageUrl, onResult, credits
                 <span className="text-sm font-medium text-[#c4d4c8]">Original</span>
               </div>
               <div className="p-4 flex items-center justify-center min-h-[200px]">
-                <img src={originalUrl} alt="Original" className="max-h-[400px] w-auto rounded-lg object-contain" />
+                <PreviewOverlay>
+                  <img src={originalUrl} alt="Original" className="max-h-[400px] w-auto rounded-lg object-contain" />
+                </PreviewOverlay>
               </div>
             </div>
             {processedUrl && (
@@ -265,7 +268,9 @@ export default function ImageEnhancer({ onBack, inputImageUrl, onResult, credits
                   <span className="text-sm font-medium text-[#c4d4c8]">Enhanced</span>
                 </div>
                 <div className="p-4 flex items-center justify-center min-h-[200px]">
-                  <img src={processedUrl} alt="Enhanced" className="max-h-[400px] w-auto rounded-lg object-contain" />
+                  <PreviewOverlay>
+                    <img src={processedUrl} alt="Enhanced" className="max-h-[400px] w-auto rounded-lg object-contain" />
+                  </PreviewOverlay>
                 </div>
               </div>
             )}

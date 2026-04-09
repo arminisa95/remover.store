@@ -10,6 +10,7 @@ import {
 
 import Header from "./Header";
 import BuyCreditsModal from "./BuyCreditsModal";
+import PreviewOverlay from "./PreviewOverlay";
 import ImageUpscaler from "./ImageUpscaler";
 import BackgroundReplacer from "./BackgroundReplacer";
 import ImageCropper from "./ImageCropper";
@@ -284,7 +285,9 @@ export default function ToolApp() {
               <span className="text-sm font-medium text-[#c4d4c8]">Preview (low resolution)</span>
             </div>
             <div className="p-4 flex items-center justify-center min-h-[200px]">
-              <img src={previewUrl || ""} alt="Preview" className="max-h-[500px] w-auto rounded-lg" />
+              <PreviewOverlay>
+                <img src={previewUrl || ""} alt="Preview" className="max-h-[500px] w-auto rounded-lg" />
+              </PreviewOverlay>
             </div>
           </div>
 

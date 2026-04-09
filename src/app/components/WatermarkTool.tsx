@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Upload, Download, Trash2, ArrowLeft, Stamp } from "lucide-react";
+import PreviewOverlay from "./PreviewOverlay";
 
 const ACCEPTED_FORMATS = "image/jpeg,image/png,image/webp,image/bmp,image/gif,image/tiff,image/avif";
 
@@ -255,7 +256,9 @@ export default function WatermarkTool({ onBack, inputImageUrl, onResult, credits
               <span className="text-sm font-medium text-[#c4d4c8]">Preview</span>
             </div>
             <div className="p-4 flex items-center justify-center min-h-[200px]">
-              <img src={processedUrl || originalUrl} alt="Preview" className="max-h-[500px] w-auto rounded-lg object-contain" />
+              <PreviewOverlay>
+                <img src={processedUrl || originalUrl} alt="Preview" className="max-h-[500px] w-auto rounded-lg object-contain" />
+              </PreviewOverlay>
             </div>
           </div>
         </div>

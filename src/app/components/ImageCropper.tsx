@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Upload, Download, Trash2, ArrowLeft, Crop } from "lucide-react";
+import PreviewOverlay from "./PreviewOverlay";
 
 const ACCEPTED_FORMATS = "image/jpeg,image/png,image/webp,image/bmp,image/gif,image/tiff,image/avif";
 
@@ -216,6 +217,7 @@ export default function ImageCropper({ onBack, inputImageUrl, onResult, credits,
 
           {/* Crop area */}
           <div className="bg-[#133027]/60 backdrop-blur-md border border-[#2a4a3a]/60 rounded-2xl overflow-hidden p-4">
+            <PreviewOverlay>
             <div
               ref={containerRef}
               className="relative inline-block select-none"
@@ -252,6 +254,7 @@ export default function ImageCropper({ onBack, inputImageUrl, onResult, credits,
                 </div>
               </div>
             </div>
+            </PreviewOverlay>
           </div>
 
           {cropArea.w > 0 && (
