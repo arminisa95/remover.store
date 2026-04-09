@@ -107,7 +107,7 @@ export default function BackgroundReplacer({
       setNoBgUrl(null);
       setProgress(0);
 
-      if (file.size > 50 * 1024 * 1024) { setError("Max. 50 MB."); return; }
+      if (file.size > 50 * 1024 * 1024) { setError("Max 50 MB."); return; }
 
       setFileName(file.name.replace(/\.[^.]+$/, ""));
       setOriginalUrl(URL.createObjectURL(file));
@@ -130,7 +130,7 @@ export default function BackgroundReplacer({
         setNoBgUrl(transparentUrl);
         await applyBackground(transparentUrl);
       } catch {
-        setError("Fehler beim Verarbeiten. Bitte erneut versuchen.");
+        setError("Processing error. Please try again.");
       } finally {
         setIsProcessing(false);
       }
@@ -174,7 +174,7 @@ export default function BackgroundReplacer({
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <button onClick={onBack} className="flex items-center gap-2 text-[#8aab98] hover:text-[#f0e8d8] mb-6 transition-colors">
-        <ArrowLeft className="w-4 h-4" /> Zurück zu allen Tools
+        <ArrowLeft className="w-4 h-4" /> Back to all tools
       </button>
 
       <div className="flex items-center gap-3 mb-8">
@@ -182,8 +182,8 @@ export default function BackgroundReplacer({
           <Palette className="w-6 h-6 text-[#4ecdc4]" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-[#f0e8d8]">Hintergrund ersetzen</h2>
-          <p className="text-sm text-[#8aab98]">Hintergrund entfernen & durch Farbe, Gradient oder Bild ersetzen – 1 Credit</p>
+          <h2 className="text-2xl font-bold text-[#f0e8d8]">Replace Background</h2>
+          <p className="text-sm text-[#8aab98]">Remove & replace background with color, gradient, or image – 1 Credit</p>
         </div>
       </div>
 
@@ -200,7 +200,7 @@ export default function BackgroundReplacer({
           <div className="bg-[#4ecdc4]/15 p-4 rounded-2xl pointer-events-none">
             <Upload className="w-10 h-10 text-[#4ecdc4]" />
           </div>
-          <p className="text-lg font-semibold text-[#f0e8d8] pointer-events-none">Bild hochladen</p>
+          <p className="text-lg font-semibold text-[#f0e8d8] pointer-events-none">Upload image</p>
           <input ref={fileInputRef} type="file" accept={ACCEPTED_FORMATS} onChange={handleFileInput}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
         </div>
@@ -213,12 +213,12 @@ export default function BackgroundReplacer({
             {processedUrl && (
               <button onClick={downloadImage}
                 className="flex items-center gap-2 bg-[#4ecdc4] hover:bg-[#45b8b0] text-[#0b1f1a] font-semibold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-[#4ecdc4]/20">
-                <Download className="w-5 h-5" /> PNG herunterladen
+                <Download className="w-5 h-5" /> Download PNG
               </button>
             )}
             <button onClick={reset}
               className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-6 py-3 rounded-xl transition-colors">
-              <Trash2 className="w-5 h-5" /> Neues Bild
+              <Trash2 className="w-5 h-5" /> New image
             </button>
           </div>
 
@@ -226,7 +226,7 @@ export default function BackgroundReplacer({
             <div className="bg-[#133027]/80 backdrop-blur-md border border-[#2a4a3a]/60 rounded-xl p-5">
               <div className="flex items-center gap-3 mb-3">
                 <Loader2 className="w-5 h-5 text-[#4ecdc4] animate-spin" />
-                <span className="font-medium text-[#f0e8d8]">Hintergrund wird entfernt…</span>
+                <span className="font-medium text-[#f0e8d8]">Removing background…</span>
                 <span className="text-sm text-[#8aab98] ml-auto">{progress}%</span>
               </div>
               <div className="w-full bg-[#1a3a2e] rounded-full h-2 overflow-hidden">
@@ -247,7 +247,7 @@ export default function BackgroundReplacer({
                     className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
                       bgType === t ? "bg-[#4ecdc4] text-[#0b1f1a]" : "bg-[#1a3a2e] text-[#8aab98] hover:bg-[#1a4035]"
                     }`}>
-                    {t === "color" ? "Farbe" : t === "gradient" ? "Gradient" : "Bild"}
+                    {t === "color" ? "Color" : t === "gradient" ? "Gradient" : "Image"}
                   </button>
                 ))}
               </div>
@@ -279,7 +279,7 @@ export default function BackgroundReplacer({
                 <div>
                   <button onClick={() => bgFileInputRef.current?.click()}
                     className="bg-[#1a3a2e] hover:bg-[#1a4035] text-[#8aab98] px-4 py-2 rounded-lg text-sm border border-[#2a4a3a] transition-colors">
-                    Hintergrundbild wählen
+                    Choose background image
                   </button>
                   <input ref={bgFileInputRef} type="file" accept="image/*" className="hidden"
                     onChange={(e) => {
@@ -305,7 +305,7 @@ export default function BackgroundReplacer({
             {processedUrl && (
               <div className="bg-[#133027]/60 backdrop-blur-md border border-[#2a4a3a]/60 rounded-2xl overflow-hidden">
                 <div className="px-4 py-3 border-b border-[#2a4a3a]/60">
-                  <span className="text-sm font-medium text-[#c4d4c8]">Neuer Hintergrund</span>
+                  <span className="text-sm font-medium text-[#c4d4c8]">New background</span>
                 </div>
                 <div className="p-4 flex items-center justify-center min-h-[200px]">
                   <img src={processedUrl} alt="Result" className="max-h-[500px] w-auto rounded-lg object-contain" />

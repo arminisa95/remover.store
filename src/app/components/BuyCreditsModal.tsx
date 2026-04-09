@@ -4,10 +4,10 @@ import { useState } from "react";
 import { X, CreditCard, Loader2 } from "lucide-react";
 
 const CREDIT_PACKAGES = [
-  { credits: 10, price: "2,99 €", label: "10 Credits", perCredit: "0,30 €/Credit" },
-  { credits: 30, price: "6,99 €", label: "30 Credits", perCredit: "0,23 €/Credit", badge: "Beliebt" },
-  { credits: 75, price: "14,99 €", label: "75 Credits", perCredit: "0,20 €/Credit", badge: "Spare 33%" },
-  { credits: 200, price: "29,99 €", label: "200 Credits", perCredit: "0,15 €/Credit", badge: "Spare 50%" },
+  { credits: 10, price: "€2.99", label: "10 Credits", perCredit: "€0.30/Credit" },
+  { credits: 30, price: "€6.99", label: "30 Credits", perCredit: "€0.23/Credit", badge: "Popular" },
+  { credits: 75, price: "€14.99", label: "75 Credits", perCredit: "€0.20/Credit", badge: "Save 33%" },
+  { credits: 200, price: "€29.99", label: "200 Credits", perCredit: "€0.15/Credit", badge: "Save 50%" },
 ];
 
 interface BuyCreditsModalProps {
@@ -30,10 +30,10 @@ export default function BuyCreditsModal({ onClose, onError }: BuyCreditsModalPro
       if (data.url) {
         window.location.href = data.url;
       } else {
-        onError(data.error || "Zahlung konnte nicht gestartet werden.");
+        onError(data.error || "Could not start payment.");
       }
     } catch {
-      onError("Verbindungsfehler. Bitte versuche es erneut.");
+      onError("Connection error. Please try again.");
     } finally {
       setBuyLoading(null);
     }
@@ -54,8 +54,8 @@ export default function BuyCreditsModal({ onClose, onError }: BuyCreditsModalPro
             <CreditCard className="w-6 h-6 text-[#4ecdc4]" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-[#f0e8d8]">Credits kaufen</h2>
-            <p className="text-xs text-[#8aab98]">1 Credit = 1 KI-Verarbeitung</p>
+            <h2 className="text-lg font-bold text-[#f0e8d8]">Buy Credits</h2>
+            <p className="text-xs text-[#8aab98]">1 Credit = 1 AI processing</p>
           </div>
         </div>
 
@@ -83,7 +83,7 @@ export default function BuyCreditsModal({ onClose, onError }: BuyCreditsModalPro
         </div>
 
         <p className="text-xs text-[#6b8f7e] mt-4 text-center">
-          Zahlung via Kreditkarte, Debitkarte, Google Pay, Apple Pay oder PayPal
+          Pay with credit card, debit card, Google Pay, or Apple Pay
         </p>
       </div>
     </div>

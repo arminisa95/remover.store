@@ -131,16 +131,16 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
   }, [originalUrl, processedUrl]);
 
   const SLIDERS = [
-    { label: "Helligkeit", value: brightness, set: setBrightness, min: 50, max: 200, key: "br" },
-    { label: "Kontrast", value: contrast, set: setContrast, min: 50, max: 200, key: "co" },
-    { label: "Sättigung", value: saturation, set: setSaturation, min: 0, max: 200, key: "sa" },
-    { label: "Schärfe", value: sharpness, set: setSharpness, min: 0, max: 100, key: "sh" },
+    { label: "Brightness", value: brightness, set: setBrightness, min: 50, max: 200, key: "br" },
+    { label: "Contrast", value: contrast, set: setContrast, min: 50, max: 200, key: "co" },
+    { label: "Saturation", value: saturation, set: setSaturation, min: 0, max: 200, key: "sa" },
+    { label: "Sharpness", value: sharpness, set: setSharpness, min: 0, max: 100, key: "sh" },
   ];
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <button onClick={onBack} className="flex items-center gap-2 text-[#8aab98] hover:text-[#f0e8d8] mb-6 transition-colors">
-        <ArrowLeft className="w-4 h-4" /> Zurück zu allen Tools
+        <ArrowLeft className="w-4 h-4" /> Back to all tools
       </button>
 
       <div className="flex items-center gap-3 mb-8">
@@ -148,8 +148,8 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
           <Sparkles className="w-6 h-6 text-[#4ecdc4]" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-[#f0e8d8]">Bild verbessern</h2>
-          <p className="text-sm text-[#8aab98]">Helligkeit, Kontrast, Sättigung & Schärfe anpassen – kostenlos</p>
+          <h2 className="text-2xl font-bold text-[#f0e8d8]">Enhance Image</h2>
+          <p className="text-sm text-[#8aab98]">Adjust brightness, contrast, saturation & sharpness – free</p>
         </div>
       </div>
 
@@ -165,7 +165,7 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
           <div className="bg-[#4ecdc4]/15 p-4 rounded-2xl pointer-events-none">
             <Upload className="w-10 h-10 text-[#4ecdc4]" />
           </div>
-          <p className="text-lg font-semibold text-[#f0e8d8] pointer-events-none">Bild hochladen zum Verbessern</p>
+          <p className="text-lg font-semibold text-[#f0e8d8] pointer-events-none">Upload image to enhance</p>
           <input ref={fileInputRef} type="file" accept={ACCEPTED_FORMATS} onChange={handleFileInput}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
         </div>
@@ -177,7 +177,7 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
             {processedUrl && (
               <button onClick={downloadImage}
                 className="flex items-center gap-2 bg-[#4ecdc4] hover:bg-[#45b8b0] text-[#0b1f1a] font-semibold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-[#4ecdc4]/20">
-                <Download className="w-5 h-5" /> Herunterladen
+                <Download className="w-5 h-5" /> Download
               </button>
             )}
             <button onClick={autoEnhance}
@@ -190,7 +190,7 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
             </button>
             <button onClick={reset}
               className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-4 py-3 rounded-xl transition-colors">
-              <Trash2 className="w-4 h-4" /> Neues Bild
+              <Trash2 className="w-4 h-4" /> New image
             </button>
           </div>
 
@@ -227,7 +227,7 @@ export default function ImageEnhancer({ onBack }: ImageEnhancerProps) {
             {processedUrl && (
               <div className="bg-[#133027]/60 backdrop-blur-md border border-[#2a4a3a]/60 rounded-2xl overflow-hidden">
                 <div className="px-4 py-3 border-b border-[#2a4a3a]/60">
-                  <span className="text-sm font-medium text-[#c4d4c8]">Verbessert</span>
+                  <span className="text-sm font-medium text-[#c4d4c8]">Enhanced</span>
                 </div>
                 <div className="p-4 flex items-center justify-center min-h-[200px]">
                   <img src={processedUrl} alt="Enhanced" className="max-h-[400px] w-auto rounded-lg object-contain" />

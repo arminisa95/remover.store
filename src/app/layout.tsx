@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "remover.store – KI-Bildtools",
-  description: "Hintergrund entfernen, AI Upscaling, Komprimieren, Zuschneiden & mehr – direkt im Browser",
+  title: "remover.store – AI Image Tools",
+  description: "Remove backgrounds, AI upscaling, compress, crop & more – directly in your browser",
 };
 
 export default function RootLayout({

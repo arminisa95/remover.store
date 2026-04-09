@@ -6,7 +6,7 @@ import { Upload, Download, Trash2, ArrowLeft, Crop } from "lucide-react";
 const ACCEPTED_FORMATS = "image/jpeg,image/png,image/webp,image/bmp,image/gif,image/tiff,image/avif";
 
 const PRESETS = [
-  { label: "Frei", ratio: 0 },
+  { label: "Free", ratio: 0 },
   { label: "1:1 Instagram", ratio: 1 },
   { label: "4:5 IG Portrait", ratio: 4 / 5 },
   { label: "9:16 Story/Reel", ratio: 9 / 16 },
@@ -125,7 +125,7 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <button onClick={onBack} className="flex items-center gap-2 text-[#8aab98] hover:text-[#f0e8d8] mb-6 transition-colors">
-        <ArrowLeft className="w-4 h-4" /> Zurück zu allen Tools
+        <ArrowLeft className="w-4 h-4" /> Back to all tools
       </button>
 
       <div className="flex items-center gap-3 mb-8">
@@ -133,8 +133,8 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
           <Crop className="w-6 h-6 text-[#4ecdc4]" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-[#f0e8d8]">Bild zuschneiden</h2>
-          <p className="text-sm text-[#8aab98]">Zuschneiden mit Social-Media-Presets – kostenlos</p>
+          <h2 className="text-2xl font-bold text-[#f0e8d8]">Crop & Resize</h2>
+          <p className="text-sm text-[#8aab98]">Crop with social media presets – free</p>
         </div>
       </div>
 
@@ -150,7 +150,7 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
           <div className="bg-[#4ecdc4]/15 p-4 rounded-2xl pointer-events-none">
             <Upload className="w-10 h-10 text-[#4ecdc4]" />
           </div>
-          <p className="text-lg font-semibold text-[#f0e8d8] pointer-events-none">Bild hochladen zum Zuschneiden</p>
+          <p className="text-lg font-semibold text-[#f0e8d8] pointer-events-none">Upload image to crop</p>
           <input ref={fileInputRef} type="file" accept={ACCEPTED_FORMATS} onChange={handleFileInput}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
         </div>
@@ -161,11 +161,11 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
           <div className="flex flex-wrap items-center gap-3">
             <button onClick={downloadCropped}
               className="flex items-center gap-2 bg-[#4ecdc4] hover:bg-[#45b8b0] text-[#0b1f1a] font-semibold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-[#4ecdc4]/20">
-              <Download className="w-5 h-5" /> Zugeschnitten herunterladen
+              <Download className="w-5 h-5" /> Download cropped
             </button>
             <button onClick={reset}
               className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-6 py-3 rounded-xl transition-colors">
-              <Trash2 className="w-5 h-5" /> Neues Bild
+              <Trash2 className="w-5 h-5" /> New image
             </button>
           </div>
 
@@ -223,7 +223,7 @@ export default function ImageCropper({ onBack }: ImageCropperProps) {
 
           {cropArea.w > 0 && (
             <p className="text-xs text-[#8aab98]">
-              Ausgabegröße: {Math.round(cropArea.w * imgDims.natW / imgDims.w)} × {Math.round(cropArea.h * imgDims.natH / imgDims.h)} px
+              Output size: {Math.round(cropArea.w * imgDims.natW / imgDims.w)} × {Math.round(cropArea.h * imgDims.natH / imgDims.h)} px
             </p>
           )}
         </div>

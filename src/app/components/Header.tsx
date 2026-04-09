@@ -22,7 +22,7 @@ export default function Header({ credits, onBuyCredits }: HeaderProps) {
             remover.store
           </h1>
           <p className="text-xs text-[#8aab98]">
-            KI-Bildtools – schnell & direkt im Browser
+            AI Image Tools – fast & in-browser
           </p>
         </div>
 
@@ -41,7 +41,7 @@ export default function Header({ credits, onBuyCredits }: HeaderProps) {
             <button
               onClick={() => signOut()}
               className="text-[#8aab98] hover:text-[#f0e8d8] transition-colors p-2"
-              title="Abmelden"
+              title="Sign out"
             >
               <LogOut className="w-4 h-4" />
             </button>
@@ -51,7 +51,7 @@ export default function Header({ credits, onBuyCredits }: HeaderProps) {
             onClick={() => router.push("/login")}
             className="bg-[#4ecdc4] hover:bg-[#45b8b0] text-[#0b1f1a] font-semibold px-5 py-2 rounded-lg text-sm transition-colors"
           >
-            Anmelden
+            Sign in
           </button>
         )}
       </div>

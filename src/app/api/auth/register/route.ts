@@ -8,14 +8,14 @@ export async function POST(req: Request) {
 
     if (!email || !password) {
       return NextResponse.json(
-        { error: "E-Mail und Passwort sind erforderlich." },
+        { error: "Email and password are required." },
         { status: 400 }
       );
     }
 
     if (password.length < 6) {
       return NextResponse.json(
-        { error: "Passwort muss mindestens 6 Zeichen lang sein." },
+        { error: "Password must be at least 6 characters." },
         { status: 400 }
       );
     }
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
       return NextResponse.json(
-        { error: "Diese E-Mail ist bereits registriert." },
+        { error: "This email is already registered." },
         { status: 409 }
       );
     }

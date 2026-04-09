@@ -39,7 +39,7 @@ export default function ImageUpscaler({
       setProgress(0);
 
       if (file.size > 50 * 1024 * 1024) {
-        setError("Die Datei ist zu groß. Maximal 50 MB.");
+        setError("File too large. Maximum 50 MB.");
         return;
       }
 
@@ -134,7 +134,7 @@ export default function ImageUpscaler({
         setProgress(100);
       } catch (err) {
         console.error("Upscale failed:", err);
-        setError("Fehler beim Hochskalieren. Bitte versuche es erneut.");
+        setError("Error upscaling. Please try again.");
       } finally {
         setIsProcessing(false);
       }
@@ -172,7 +172,7 @@ export default function ImageUpscaler({
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <button onClick={onBack} className="flex items-center gap-2 text-[#8aab98] hover:text-[#f0e8d8] mb-6 transition-colors">
-        <ArrowLeft className="w-4 h-4" /> Zurück zu allen Tools
+        <ArrowLeft className="w-4 h-4" /> Back to all tools
       </button>
 
       <div className="flex items-center gap-3 mb-8">
@@ -181,14 +181,14 @@ export default function ImageUpscaler({
         </div>
         <div>
           <h2 className="text-2xl font-bold text-[#f0e8d8]">AI Upscaling</h2>
-          <p className="text-sm text-[#8aab98]">Bilder vergrößern ohne Qualitätsverlust – 1 Credit</p>
+          <p className="text-sm text-[#8aab98]">Enlarge images without quality loss – 1 Credit</p>
         </div>
       </div>
 
       {/* Scale selector */}
       {!originalUrl && !isProcessing && (
         <div className="mb-6 flex items-center gap-3">
-          <span className="text-sm text-[#8aab98]">Skalierung:</span>
+          <span className="text-sm text-[#8aab98]">Scale:</span>
           {SCALE_OPTIONS.map((s) => (
             <button
               key={s}
@@ -221,8 +221,8 @@ export default function ImageUpscaler({
             <Upload className="w-10 h-10 text-[#4ecdc4]" />
           </div>
           <div className="text-center pointer-events-none">
-            <p className="text-lg font-semibold text-[#f0e8d8]">Bild hochladen zum Vergrößern</p>
-            <p className="text-sm text-[#8aab98] mt-1">JPG, PNG, WebP – max. 50 MB</p>
+            <p className="text-lg font-semibold text-[#f0e8d8]">Upload image to enlarge</p>
+            <p className="text-sm text-[#8aab98] mt-1">JPG, PNG, WebP – max 50 MB</p>
           </div>
           <input
             ref={fileInputRef} type="file" accept={ACCEPTED_FORMATS}
@@ -239,12 +239,12 @@ export default function ImageUpscaler({
             {processedUrl && (
               <button onClick={downloadImage}
                 className="flex items-center gap-2 bg-[#4ecdc4] hover:bg-[#45b8b0] text-[#0b1f1a] font-semibold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-[#4ecdc4]/20">
-                <Download className="w-5 h-5" /> PNG herunterladen
+                <Download className="w-5 h-5" /> Download PNG
               </button>
             )}
             <button onClick={reset}
               className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-6 py-3 rounded-xl transition-colors">
-              <Trash2 className="w-5 h-5" /> Neues Bild
+              <Trash2 className="w-5 h-5" /> New image
             </button>
           </div>
 
@@ -252,7 +252,7 @@ export default function ImageUpscaler({
             <div className="bg-[#133027]/80 backdrop-blur-md border border-[#2a4a3a]/60 rounded-xl p-5">
               <div className="flex items-center gap-3 mb-3">
                 <Loader2 className="w-5 h-5 text-[#4ecdc4] animate-spin" />
-                <span className="font-medium text-[#f0e8d8]">Bild wird {scale}x hochskaliert…</span>
+                <span className="font-medium text-[#f0e8d8]">Upscaling image {scale}x…</span>
                 <span className="text-sm text-[#8aab98] ml-auto">{progress}%</span>
               </div>
               <div className="w-full bg-[#1a3a2e] rounded-full h-2 overflow-hidden">
@@ -282,7 +282,7 @@ export default function ImageUpscaler({
               <div className="bg-[#133027]/60 backdrop-blur-md border border-[#2a4a3a]/60 rounded-2xl overflow-hidden">
                 <div className="px-4 py-3 border-b border-[#2a4a3a]/60">
                   <span className="text-sm font-medium text-[#c4d4c8]">
-                    Hochskaliert ({originalSize.w * scale} × {originalSize.h * scale})
+                    Upscaled ({originalSize.w * scale} × {originalSize.h * scale})
                   </span>
                 </div>
                 <div className="p-4 flex items-center justify-center min-h-[200px]">

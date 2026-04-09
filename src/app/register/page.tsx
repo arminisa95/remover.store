@@ -29,7 +29,7 @@ export default function RegisterPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Registrierung fehlgeschlagen.");
+        setError(data.error || "Registration failed.");
         setLoading(false);
         return;
       }
@@ -43,13 +43,13 @@ export default function RegisterPage() {
       setLoading(false);
 
       if (loginRes?.error) {
-        setError("Konto erstellt, aber Anmeldung fehlgeschlagen. Bitte manuell anmelden.");
+        setError("Account created but sign-in failed. Please sign in manually.");
       } else {
         router.push("/");
         router.refresh();
       }
     } catch {
-      setError("Ein Fehler ist aufgetreten.");
+      setError("Something went wrong.");
       setLoading(false);
     }
   };
@@ -59,9 +59,9 @@ export default function RegisterPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <img src="/logo.png" alt="bR" className="w-16 h-16 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-[#f0e8d8]">Registrieren</h1>
+          <h1 className="text-2xl font-bold text-[#f0e8d8]">Create account</h1>
           <p className="text-sm text-[#8aab98] mt-1">
-            Erstelle ein Konto um loszulegen
+            Sign up to get started
           </p>
         </div>
 
@@ -84,13 +84,13 @@ export default function RegisterPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-4 py-3 rounded-xl bg-[#0b1f1a]/80 border border-[#2a4a3a] text-[#f0e8d8] placeholder-[#5a7a6a] focus:outline-none focus:border-[#4ecdc4] transition-colors"
-              placeholder="Max Mustermann"
+              placeholder="John Doe"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-[#c4d4c8] mb-1.5">
-              E-Mail
+              Email
             </label>
             <input
               type="email"
@@ -98,13 +98,13 @@ export default function RegisterPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-4 py-3 rounded-xl bg-[#0b1f1a]/80 border border-[#2a4a3a] text-[#f0e8d8] placeholder-[#5a7a6a] focus:outline-none focus:border-[#4ecdc4] transition-colors"
-              placeholder="name@beispiel.de"
+              placeholder="name@example.com"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-[#c4d4c8] mb-1.5">
-              Passwort
+              Password
             </label>
             <input
               type="password"
@@ -113,7 +113,7 @@ export default function RegisterPage() {
               required
               minLength={6}
               className="w-full px-4 py-3 rounded-xl bg-[#0b1f1a]/80 border border-[#2a4a3a] text-[#f0e8d8] placeholder-[#5a7a6a] focus:outline-none focus:border-[#4ecdc4] transition-colors"
-              placeholder="Mindestens 6 Zeichen"
+              placeholder="At least 6 characters"
             />
           </div>
 
@@ -127,16 +127,16 @@ export default function RegisterPage() {
             ) : (
               <UserPlus className="w-5 h-5" />
             )}
-            Konto erstellen
+            Create account
           </button>
 
           <p className="text-center text-sm text-[#8aab98]">
-            Bereits ein Konto?{" "}
+            Already have an account?{" "}
             <Link
               href="/login"
               className="text-[#4ecdc4] hover:underline font-medium"
             >
-              Anmelden
+              Sign in
             </Link>
           </p>
         </form>

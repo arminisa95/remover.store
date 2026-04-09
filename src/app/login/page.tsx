@@ -27,7 +27,7 @@ export default function LoginPage() {
     setLoading(false);
 
     if (res?.error) {
-      setError("E-Mail oder Passwort falsch.");
+      setError("Invalid email or password.");
     } else {
       router.push("/");
       router.refresh();
@@ -39,9 +39,9 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <img src="/logo.png" alt="bR" className="w-16 h-16 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-[#f0e8d8]">Anmelden</h1>
+          <h1 className="text-2xl font-bold text-[#f0e8d8]">Sign in</h1>
           <p className="text-sm text-[#8aab98] mt-1">
-            Melde dich an um Hintergründe zu entfernen
+            Sign in to start editing images
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export default function LoginPage() {
 
           <div>
             <label className="block text-sm font-medium text-[#c4d4c8] mb-1.5">
-              E-Mail
+              Email
             </label>
             <input
               type="email"
@@ -65,13 +65,13 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-4 py-3 rounded-xl bg-[#0b1f1a]/80 border border-[#2a4a3a] text-[#f0e8d8] placeholder-[#5a7a6a] focus:outline-none focus:border-[#4ecdc4] transition-colors"
-              placeholder="name@beispiel.de"
+              placeholder="name@example.com"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-[#c4d4c8] mb-1.5">
-              Passwort
+              Password
             </label>
             <input
               type="password"
@@ -93,16 +93,16 @@ export default function LoginPage() {
             ) : (
               <LogIn className="w-5 h-5" />
             )}
-            Anmelden
+            Sign in
           </button>
 
           <p className="text-center text-sm text-[#8aab98]">
-            Noch kein Konto?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/register"
               className="text-[#4ecdc4] hover:underline font-medium"
             >
-              Jetzt registrieren
+              Create account
             </Link>
           </p>
         </form>

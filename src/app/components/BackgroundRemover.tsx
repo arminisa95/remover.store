@@ -70,7 +70,7 @@ export default function BackgroundRemover({
       setProgress(0);
 
       if (file.size > 50 * 1024 * 1024) {
-        setError("Die Datei ist zu groß. Maximal 50 MB.");
+        setError("File too large. Maximum 50 MB.");
         return;
       }
 
@@ -124,7 +124,7 @@ export default function BackgroundRemover({
       } catch (err) {
         console.error("Background removal failed:", err);
         setError(
-          "Fehler beim Entfernen des Hintergrunds. Bitte versuche es erneut."
+          "Error removing background. Please try again."
         );
       } finally {
         setIsProcessing(false);
@@ -186,7 +186,7 @@ export default function BackgroundRemover({
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <button onClick={onBack} className="flex items-center gap-2 text-[#8aab98] hover:text-[#f0e8d8] mb-6 transition-colors">
-        <ArrowLeft className="w-4 h-4" /> Zurück zu allen Tools
+        <ArrowLeft className="w-4 h-4" /> Back to all tools
       </button>
 
       <div className="flex items-center gap-3 mb-8">
@@ -194,8 +194,8 @@ export default function BackgroundRemover({
           <Scissors className="w-6 h-6 text-[#4ecdc4]" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-[#f0e8d8]">Hintergrund entfernen</h2>
-          <p className="text-sm text-[#8aab98]">KI entfernt den Hintergrund aus jedem Bild – 1 Credit</p>
+          <h2 className="text-2xl font-bold text-[#f0e8d8]">Remove Background</h2>
+          <p className="text-sm text-[#8aab98]">AI removes the background from any image – 1 Credit</p>
         </div>
       </div>
 
@@ -220,10 +220,10 @@ export default function BackgroundRemover({
           </div>
           <div className="text-center pointer-events-none">
             <p className="text-lg font-semibold text-[#f0e8d8]">
-              Bild hierher ziehen oder klicken
+              Drag & drop an image or click to upload
             </p>
             <p className="text-sm text-[#8aab98] mt-1">
-              JPG, PNG, WebP, BMP, GIF, TIFF, AVIF – max. 50 MB
+              JPG, PNG, WebP, BMP, GIF, TIFF, AVIF – max 50 MB
             </p>
           </div>
           <input
@@ -246,7 +246,7 @@ export default function BackgroundRemover({
                 className="flex items-center gap-2 bg-[#4ecdc4] hover:bg-[#45b8b0] text-[#0b1f1a] font-semibold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-[#4ecdc4]/20"
               >
                 <Download className="w-5 h-5" />
-                PNG herunterladen
+                Download PNG
               </button>
             )}
             <button
@@ -254,7 +254,7 @@ export default function BackgroundRemover({
               className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-6 py-3 rounded-xl transition-colors"
             >
               <Trash2 className="w-5 h-5" />
-              Neues Bild
+              New image
             </button>
           </div>
 
@@ -263,7 +263,7 @@ export default function BackgroundRemover({
               <div className="flex items-center gap-3 mb-3">
                 <Loader2 className="w-5 h-5 text-[#4ecdc4] animate-spin" />
                 <span className="font-medium text-[#f0e8d8]">
-                  KI entfernt den Hintergrund…
+                  AI is removing the background…
                 </span>
                 <span className="text-sm text-[#8aab98] ml-auto">
                   {progress}%
@@ -276,8 +276,7 @@ export default function BackgroundRemover({
                 />
               </div>
               <p className="text-xs text-[#6b8f7e] mt-2">
-                Beim ersten Mal werden die KI-Modelle heruntergeladen (~40
-                MB). Danach geht es schneller.
+                First time downloads AI models (~40 MB). It will be faster next time.
               </p>
             </div>
           )}
@@ -305,10 +304,10 @@ export default function BackgroundRemover({
               <div className="bg-[#133027]/60 backdrop-blur-md border border-[#2a4a3a]/60 rounded-2xl overflow-hidden">
                 <div className="px-4 py-3 border-b border-[#2a4a3a]/60 flex items-center gap-2">
                   <img src="/logo.png" alt="" className="w-4 h-4 object-contain" />
-                  <span className="text-sm font-medium text-[#c4d4c8]">Ohne Hintergrund</span>
+                  <span className="text-sm font-medium text-[#c4d4c8]">No background</span>
                 </div>
                 <div className="p-4 flex items-center justify-center min-h-[200px] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMWEzYTJlIi8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiMxYTNhMmUiLz48cmVjdCB4PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMTMzMDI3Ii8+PHJlY3QgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzEzMzAyNyIvPjwvc3ZnPg==')]">
-                  <img src={processedUrl} alt="Ohne Hintergrund" className="max-h-[500px] w-auto rounded-lg object-contain" />
+                  <img src={processedUrl} alt="No background" className="max-h-[500px] w-auto rounded-lg object-contain" />
                 </div>
               </div>
             )}

@@ -6,12 +6,12 @@ import { prisma } from "@/lib/prisma";
 export async function POST() {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
-    return NextResponse.json({ error: "Nicht eingeloggt." }, { status: 401 });
+    return NextResponse.json({ error: "Not logged in." }, { status: 401 });
   }
 
   const userId = (session.user as { id?: string }).id;
   if (!userId) {
-    return NextResponse.json({ error: "User ID fehlt." }, { status: 401 });
+    return NextResponse.json({ error: "User ID missing." }, { status: 401 });
   }
 
   const user = await prisma.user.findUnique({
@@ -21,7 +21,7 @@ export async function POST() {
 
   if (!user || user.credits < 1) {
     return NextResponse.json(
-      { error: "Nicht genug Credits. Bitte kaufe zuerst Credits." },
+      { error: "Not enough credits. Please purchase credits first." },
       { status: 402 }
     );
   }

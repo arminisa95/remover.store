@@ -236,7 +236,7 @@ export default function ObjectRemover({
       if (processedUrl) URL.revokeObjectURL(processedUrl);
       setProcessedUrl(URL.createObjectURL(blob));
     } catch {
-      setError("Fehler beim Entfernen. Bitte erneut versuchen.");
+      setError("Error removing objects. Please try again.");
     } finally {
       setIsProcessing(false);
     }
@@ -261,7 +261,7 @@ export default function ObjectRemover({
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <button onClick={onBack} className="flex items-center gap-2 text-[#8aab98] hover:text-[#f0e8d8] mb-6 transition-colors">
-        <ArrowLeft className="w-4 h-4" /> Zurück zu allen Tools
+        <ArrowLeft className="w-4 h-4" /> Back to all tools
       </button>
 
       <div className="flex items-center gap-3 mb-8">
@@ -269,8 +269,8 @@ export default function ObjectRemover({
           <Eraser className="w-6 h-6 text-[#4ecdc4]" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-[#f0e8d8]">Objekte entfernen</h2>
-          <p className="text-sm text-[#8aab98]">Unerwünschte Objekte übermalen und entfernen – 1 Credit</p>
+          <h2 className="text-2xl font-bold text-[#f0e8d8]">Retoucher</h2>
+          <p className="text-sm text-[#8aab98]">Paint over and remove unwanted objects – 1 Credit</p>
         </div>
       </div>
 
@@ -286,8 +286,8 @@ export default function ObjectRemover({
           <div className="bg-[#4ecdc4]/15 p-4 rounded-2xl pointer-events-none">
             <Upload className="w-10 h-10 text-[#4ecdc4]" />
           </div>
-          <p className="text-lg font-semibold text-[#f0e8d8] pointer-events-none">Bild hochladen</p>
-          <p className="text-sm text-[#8aab98] pointer-events-none">Male über die Objekte die du entfernen möchtest</p>
+          <p className="text-lg font-semibold text-[#f0e8d8] pointer-events-none">Upload image</p>
+          <p className="text-sm text-[#8aab98] pointer-events-none">Paint over the objects you want to remove</p>
           <input ref={fileInputRef} type="file" accept={ACCEPTED_FORMATS} onChange={handleFileInput}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
         </div>
@@ -299,28 +299,28 @@ export default function ObjectRemover({
             <button onClick={inpaint} disabled={isProcessing}
               className="flex items-center gap-2 bg-[#4ecdc4] hover:bg-[#45b8b0] text-[#0b1f1a] font-semibold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-[#4ecdc4]/20 disabled:opacity-50">
               {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : <Eraser className="w-5 h-5" />}
-              {isProcessing ? "Entferne…" : "Markierte Objekte entfernen"}
+              {isProcessing ? "Processing…" : "Remove marked objects"}
             </button>
             {processedUrl && (
               <button onClick={downloadImage}
                 className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-6 py-3 rounded-xl transition-colors">
-                <Download className="w-5 h-5" /> Herunterladen
+                <Download className="w-5 h-5" /> Download
               </button>
             )}
             <button onClick={undo}
               className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-4 py-3 rounded-xl transition-colors">
-              <Undo2 className="w-4 h-4" /> Maske löschen
+              <Undo2 className="w-4 h-4" /> Clear mask
             </button>
             <button onClick={reset}
               className="flex items-center gap-2 bg-[#f0e8d8]/10 hover:bg-[#f0e8d8]/20 text-[#f0e8d8] font-semibold px-4 py-3 rounded-xl transition-colors">
-              <Trash2 className="w-4 h-4" /> Neues Bild
+              <Trash2 className="w-4 h-4" /> New image
             </button>
           </div>
 
           {/* Brush size */}
           <div className="bg-[#133027]/60 backdrop-blur-md border border-[#2a4a3a]/60 rounded-xl p-4">
             <div className="flex items-center gap-4">
-              <span className="text-sm text-[#8aab98]">Pinselgröße</span>
+              <span className="text-sm text-[#8aab98]">Brush size</span>
               <input type="range" min="5" max="100" value={brushSize}
                 onChange={(e) => setBrushSize(parseInt(e.target.value))}
                 className="flex-1 accent-[#4ecdc4]" />
@@ -332,7 +332,7 @@ export default function ObjectRemover({
 
           {/* Canvas */}
           <div className="bg-[#133027]/60 backdrop-blur-md border border-[#2a4a3a]/60 rounded-2xl overflow-hidden p-4">
-            <p className="text-xs text-[#8aab98] mb-3">Male über die Objekte die du entfernen möchtest (rot markiert)</p>
+            <p className="text-xs text-[#8aab98] mb-3">Paint over the objects you want to remove (highlighted in red)</p>
             <div className="flex justify-center relative">
               <canvas
                 ref={canvasRef}

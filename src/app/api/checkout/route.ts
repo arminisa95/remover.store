@@ -14,18 +14,18 @@ export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
-      return NextResponse.json({ error: "Nicht eingeloggt." }, { status: 401 });
+      return NextResponse.json({ error: "Not logged in." }, { status: 401 });
     }
 
     const userId = (session.user as { id?: string }).id;
     if (!userId) {
-      return NextResponse.json({ error: "User ID fehlt." }, { status: 401 });
+      return NextResponse.json({ error: "User ID missing." }, { status: 401 });
     }
 
     const { packageIndex } = await req.json();
     const pkg = CREDIT_PACKAGES[packageIndex];
     if (!pkg) {
-      return NextResponse.json({ error: "Ungültiges Paket." }, { status: 400 });
+      return NextResponse.json({ error: "Invalid package." }, { status: 400 });
     }
 
     const baseUrl = process.env.NEXTAUTH_URL || req.headers.get("origin") || "https://removerstore.vercel.app";
@@ -59,7 +59,7 @@ export async function POST(req: Request) {
     const message = err instanceof Error ? err.message : "Unknown error";
     console.error("Checkout error:", message);
     return NextResponse.json(
-      { error: `Fehler: ${message}` },
+      { error: `Error: ${message}` },
       { status: 500 }
     );
   }
