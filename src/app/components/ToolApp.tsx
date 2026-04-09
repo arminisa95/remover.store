@@ -3,9 +3,8 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
 import {
-  Scissors, ZoomIn, Palette, Crop, FileDown,
+  Loader2, Scissors, ZoomIn, Palette, Crop, FileDown,
   Stamp, Sparkles, Eraser,
 } from "lucide-react";
 
@@ -49,10 +48,14 @@ const TOOLS: {
   { id: "watermark", label: "Watermark", desc: "Add text watermarks to your images", icon: Stamp, cost: "Free", color: "from-[#ec4899] to-[#8b5cf6]" },
 ];
 
-export default function ToolApp() {
+interface ToolAppProps {
+  initialTool?: ToolId;
+}
+
+export default function ToolApp({ initialTool = null }: ToolAppProps) {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [activeTool, setActiveTool] = useState<ToolId>(null);
+  const [activeTool, setActiveTool] = useState<ToolId>(initialTool);
   const [credits, setCredits] = useState(0);
   const [showBuyModal, setShowBuyModal] = useState(false);
   const [error, setError] = useState<string | null>(null);

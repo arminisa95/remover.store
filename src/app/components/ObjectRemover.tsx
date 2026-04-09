@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Upload, Download, Trash2, ArrowLeft, Eraser, Loader2, Undo2 } from "lucide-react";
 
 const ACCEPTED_FORMATS = "image/jpeg,image/png,image/webp,image/bmp,image/gif,image/tiff,image/avif";
@@ -29,7 +29,6 @@ export default function ObjectRemover({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const maskCanvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
-  const historyRef = useRef<ImageData[]>([]);
 
   const setupCanvases = useCallback((img: HTMLImageElement) => {
     const canvas = canvasRef.current;
@@ -53,7 +52,6 @@ export default function ObjectRemover({
     const maskCtx = maskCanvas.getContext("2d")!;
     maskCtx.clearRect(0, 0, w, h);
 
-    historyRef.current = [ctx.getImageData(0, 0, w, h)];
   }, []);
 
   const processFile = useCallback((file: File) => {
